@@ -28,7 +28,7 @@ def menu():
 
     while True:
         
-        opcio=input("Selecciona una opció: ")
+        opcio=int(input("Selecciona el numero de l'opció: "))
         if opcio == 1:
                 Consultar_tots_els_artistes(conn)
         elif opcio == 2:
@@ -46,8 +46,8 @@ def menu():
                 conn.close()
                 break   
         else:
-            print("Opcio no valida, introdueix una opcio correcta")
-            return 
+            print("Entrada no vàlida. Introdueix un número del 1 al 7.")
+             
 
 # Consultar tots els artistes
 def Consultar_tots_els_artistes(conn):
@@ -61,6 +61,9 @@ def Consultar_tots_els_artistes(conn):
 # Consultar artistes pel seu nom
 def Consultar_artistes_pel_seu_nom(conn):
     nom = input("Introdueix el nom de l'artista: ")
+    if len(nom) < 2:
+        print("Has d'introduir almenys 2 caràcters")
+        return
     cur = conn.cursor()
     cur.execute("SELECT * FROM artist WHERE name ILIKE %s;", (f"%{nom}%",))
     artistas = cur.fetchall()
@@ -74,6 +77,9 @@ def Consultar_artistes_pel_seu_nom(conn):
 # Consultar els 5 primers àlbums pel nom de l'artista
 def Consultar_5_primers_albums_per_artista(conn):
     nom = input("Introdueix el nom de l'artista: ")
+    if len(nom) < 2:
+        print("Has d'introduir almenys 2 caràcters")
+        return
     cur = conn.cursor()
     cur.execute("""
         SELECT album.album_id, album.title, artist.name 
@@ -94,6 +100,9 @@ def Consultar_5_primers_albums_per_artista(conn):
 # Afegir un artista
 def Afegir_artista(conn):
     nom = input("Introdueix el nom de l'artista: ")
+    if len(nom) < 2:
+        print("Has d'introduir almenys 2 caràcters")
+        return
     cur = conn.cursor()
     cur.execute("INSERT INTO artist (name) VALUES (%s);", (nom,))
     conn.commit()
@@ -104,6 +113,9 @@ def Afegir_artista(conn):
 def Modificar_nom_artista(conn):
     artista = input("Introdueix l'ID del teu artista: ")
     nou_nom = input("Introdueix el nou nom de l'artista: ")
+    if len(nou_nom) < 2:
+        print("Has d'introduir almenys 2 caràcters")
+        return
     cur = conn.cursor()
     cur.execute("UPDATE artist SET name = %s WHERE artist_id = %s;", (nou_nom, artista))
     conn.commit()
